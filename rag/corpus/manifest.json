@@ -1,0 +1,80 @@
+[
+ {
+  "id": "grimip",
+  "kind": "paper",
+  "title": "GRIMIP: Instance-Specific Configuration of MIP Solvers Using LLMs",
+  "url": null,
+  "local": "paper.txt",
+  "status": "ok",
+  "chars": 89384
+ },
+ {
+  "id": "hutter2010",
+  "kind": "paper",
+  "title": "Automated Configuration of Mixed Integer Programming Solvers (Hutter et al., CPAIOR 2010)",
+  "url": "https://ml.informatik.uni-freiburg.de/wp-content/uploads/papers/10-CPAIOR-MIP-Config.pdf",
+  "status": "ok"
+ },
+ {
+  "id": "knueven2020",
+  "kind": "paper",
+  "title": "On Mixed Integer Programming Formulations for the Unit Commitment Problem",
+  "url": "https://optimization-online.org/wp-content/uploads/2018/11/6930.pdf",
+  "status": "ok"
+ },
+ {
+  "id": "gurobi_tuning",
+  "kind": "official",
+  "title": "Gurobi Parameter Tuning Tool 官方文档",
+  "url": "https://docs.gurobi.com/projects/optimizer/en/13.0/features/tuning.html",
+  "status": "ok",
+  "chars": 31140
+ },
+ {
+  "id": "gurobi_support_tuning",
+  "kind": "official",
+  "title": "Gurobi Support: What is parameter tuning",
+  "url": "https://support.gurobi.com/hc/en-us/articles/19998635021713-What-is-parameter-tuning",
+  "status": "ok",
+  "chars": 6249
+ },
+ {
+  "id": "gurobi_uc_talk",
+  "kind": "official",
+  "title": "Gurobi 用户会议: 能源系统/UC 调参实践 (Yfantis)",
+  "url": "https://cdn.gurobi.com/wp-content/uploads/Vassilios-Yfantis_Gurobi.pdf?x81293",
+  "status": "ok"
+ },
+ {
+  "id": "genbench_milp",
+  "kind": "repo",
+  "title": "GenBench-MILP / EVA-MILP (含 SMAC3 调 Gurobi 8 参数的实践)",
+  "url": "https://arxiv.org/html/2505.24779v2",
+  "status": "ok",
+  "chars": 123856
+ },
+ {
+  "id": "ucjl",
+  "kind": "repo",
+  "title": "UnitCommitment.jl 文档 (UC 实例与求解器设置)",
+  "url": "https://anl-ceeesa.github.io/UnitCommitment.jl/0.3/instances/",
+  "status": "ok",
+  "chars": 15652
+ },
+ {
+  "id": "openmod_mip",
+  "kind": "forum",
+  "title": "openmod 论坛: MIP 求解器参数设置讨论",
+  "url": "https://forum.openmod.org/t/cplex-settings-for-mip-optimization/2482",
+  "status": "ok",
+  "chars": 4226
+ },
+ {
+  "id": "miplib_selection",
+  "kind": "official",
+  "title": "MIPLIB 2017 实例选择方法 (特征与难度评估)",
+  "url": "https://miplib.zib.de/Selection_Methodology.html",
+  "status": "ok",
+  "chars": 4085
+ }
+]

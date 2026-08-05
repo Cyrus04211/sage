@@ -1,0 +1,22 @@
+# secrets & environment
+.env
+.venv/
+
+# experiment outputs
+results/
+results_luna/
+smac3_output/
+*.log
+jobs.txt
+jobs_bc.txt
+
+# regenerable RAG artifacts (rebuild via rag/parse_manual.py + scripts/fetch_corpus.py + rag/build_index.py)
+rag/parameters.html
+rag/index/
+rag/corpus/raw/
+rag/corpus/txt/
+paper.txt
+
+# python
+__pycache__/
+*.pyc
