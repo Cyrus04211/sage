@@ -117,6 +117,28 @@ def filter_settable(params: list[dict]) -> tuple[list[dict], list[dict]]:
     return keep, drop
 
 
+# GRIMIP 论文附录 F.1 的固定六维空间 (SMAC-I 基线设置)
+THETA = [
+    ("MIPFocus", "int", (0, 3), 0),
+    ("Heuristics", "float", (0.0, 1.0), 0.05),
+    ("Cuts", "int", (-1, 3), -1),
+    ("Presolve", "int", (-1, 2), -1),
+    ("Method", "int", (-1, 2), -1),
+    ("VarBranch", "int", (-1, 3), -1),
+]
+
+
+def build_theta_space(seed: int = 0) -> ConfigurationSpace:
+    """Arm D: 论文固定六维空间 Θ。"""
+    cs = ConfigurationSpace(seed=seed)
+    for name, ptype, (lo, hi), default in THETA:
+        if ptype == "int":
+            cs.add(Integer(name, (lo, hi), default=default))
+        else:
+            cs.add(Float(name, (lo, hi), default=default))
+    return cs
+
+
 def build_full_space(params: list[dict], seed: int = 0) -> ConfigurationSpace:
     """Arm A 的全参数 ConfigSpace。"""
     cs = ConfigurationSpace(seed=seed)

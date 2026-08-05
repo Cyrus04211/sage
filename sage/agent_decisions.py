@@ -95,8 +95,7 @@ def select_space(feature_text: str, tunable: list[dict], k: int = 6,
     return selected
 
 
-def warmstart_configs(feature_text: str, selection: list[dict],
-                      tunable: list[dict], n: int = 5,
+def warmstart_configs(feature_text: str, selection: list[dict],                      tunable: list[dict], n: int = 5,
                       rag_context: str = "", model: str | None = None) -> list[dict]:
     """WS: LLM 生成 n 个初始配置，取值裁剪到手册范围。"""
     prompt = WS_PROMPT.format(feature_text=feature_text,
@@ -106,21 +105,85 @@ def warmstart_configs(feature_text: str, selection: list[dict],
     by_name = {p["name"]: p for p in tunable}
     configs = []
     for cfg in out.get("configs", []):
-        clean = {}
-        for name, val in cfg.items():
-            if name not in by_name or name not in [s["name"] for s in selection]:
-                continue
-            p = by_name[name]
-            try:
-                v = float(val)
-            except (TypeError, ValueError):
-                continue
-            lo = float(p["min"]) if p["min"] not in ("MAXINT", None) else -1e9
-            hi = float(p["max"]) if p["max"] not in ("MAXINT", None) else 1e9
-            v = min(max(v, lo), hi)
-            clean[name] = int(round(v)) if p["type"] == "int" else v
+        clean = _clamp_config(cfg, selection, tunable)
         if clean:
             configs.append(clean)
     if not configs:
         raise RuntimeError(f"warm-start 未产出任何合法配置: {out}")
     return configs[:n]
+
+
+# ---------------- Arm E: LLM 候选生成 (论文 candidate generation) ----------------
+
+CG_PROMPT = """You are a world-class Gurobi tuning expert optimizing solver parameters
+for a specific MIP instance (unit commitment).
+
+## Instance Feature Analysis
+{feature_text}
+
+## Tunable Parameter Space (selected subset; name, type, range, default)
+{param_space}
+
+## Optimization History (config -> PDI, lower is better; best first)
+{history_text}
+
+## Task
+Propose the NEXT configuration to evaluate. Balance exploitation (refine what
+works) and exploration (try meaningfully different parameter values). Use only
+the selected parameters; every value must lie within its range.
+
+Return ONLY valid JSON:
+{{"config": {{"<param>": <value>, ...}}, "rationale": "<one line>"}}"""
+
+
+def _fmt_history(history: list[dict], limit: int = 25) -> str:
+    """history: [{"config": {...}, "pdi": ...}]，按 PDI 升序输出。"""
+    valid = [h for h in history if h.get("pdi") is not None]
+    valid.sort(key=lambda h: h["pdi"])
+    lines = []
+    for h in valid[:limit]:
+        cfg = ", ".join(f"{k}={v}" for k, v in h["config"].items())
+        lines.append(f"- PDI {h['pdi']:.5g}  <-  {cfg}")
+    return "\n".join(lines)
+
+
+def _clamp_config(cfg: dict, selection: list[dict], tunable: list[dict]) -> dict:
+    from sage.params import INF_CAP, MAXINT_CAP
+    by_name = {p["name"]: p for p in tunable}
+    selected = {s["name"] for s in selection}
+    clean = {}
+    for name, val in cfg.items():
+        if name not in by_name or name not in selected:
+            continue
+        p = by_name[name]
+        try:
+            v = float(val)
+        except (TypeError, ValueError):
+            continue
+        lo = float(p["min"]) if p["min"] not in ("MAXINT", None) else -1e9
+        hi = float(p["max"]) if p["max"] not in ("MAXINT", None) else 1e9
+        # 与 ConfigSpace 构建口径一致 (params.build_subspace 的截断)
+        if p["type"] == "int":
+            lo, hi = min(lo, MAXINT_CAP), min(hi, MAXINT_CAP)
+        else:
+            lo, hi = max(lo, -INF_CAP), min(hi, INF_CAP)
+        v = min(max(v, lo), hi)
+        clean[name] = int(round(v)) if p["type"] == "int" else v
+    return clean
+
+
+def llm_propose(feature_text: str, selection: list[dict], tunable: list[dict],
+                history: list[dict], existing: list[dict],
+                model: str | None = None) -> dict | None:
+    """LLM 候选生成 (GRIMIP candidate generation): 基于优化历史提出下一个配置。
+    与已有配置重复时重试一次; 仍重复则返回 None (调用方回退 SMAC)。"""
+    for _ in range(2):
+        out = chat_json(CG_PROMPT.format(
+            feature_text=feature_text,
+            param_space=_fmt_param_space(selection, tunable),
+            history_text=_fmt_history(history)), system=SYSTEM,
+            temperature=0.8, model=model)
+        cfg = _clamp_config(out.get("config", {}), selection, tunable)
+        if cfg and cfg not in existing:
+            return cfg
+    return None

@@ -76,5 +76,69 @@
   "url": "https://miplib.zib.de/Selection_Methodology.html",
   "status": "ok",
   "chars": 4085
+ },
+ {
+  "id": "klotz_newman_mip",
+  "kind": "paper",
+  "title": "Practical Guidelines for Solving Difficult Mixed Integer Linear Programs (Klotz & Newman, SORMS 2013)",
+  "url": "https://people.mines.edu/anewman/wp-content/uploads/sites/158/2019/11/28-MIP_practice120212.pdf",
+  "status": "ok",
+  "chars": 83885
+ },
+ {
+  "id": "klotz_newman_lp",
+  "kind": "paper",
+  "title": "Practical Guidelines for Solving Difficult Linear Programs (Klotz & Newman, SORMS 2013)",
+  "url": "https://people.mines.edu/anewman/wp-content/uploads/sites/158/2019/11/27-LP_practice123112.pdf",
+  "status": "ok",
+  "chars": 108216
+ },
+ {
+  "id": "berthold_heuristics",
+  "kind": "paper",
+  "title": "A computational study of primal heuristics inside an MI(NL)P solver (Berthold, J. Global Optimization 2018)",
+  "url": "https://link.springer.com/content/pdf/10.1007/s10898-017-0600-3.pdf",
+  "status": "ok",
+  "chars": 53191
+ },
+ {
+  "id": "fischetti_variability",
+  "kind": "paper",
+  "title": "Improving branch-and-cut performance by random sampling (Fischetti et al., Math. Prog. Comp. 2016)",
+  "url": "https://www.dei.unipd.it/~salvagni/pdf/ksample.pdf",
+  "status": "ok",
+  "chars": 52382
+ },
+ {
+  "id": "gamrath_presolve",
+  "kind": "paper",
+  "title": "Progress in presolving for mixed integer programming (Gamrath et al., Math. Prog. Comp. 2015)",
+  "url": "https://link.springer.com/content/pdf/10.1007/s12532-015-0083-5.pdf",
+  "status": "ok",
+  "chars": 81186
+ },
+ {
+  "id": "gurobi_logs",
+  "kind": "official",
+  "title": "Gurobi Support: Interpreting Gurobi Logs (如何读 MIP 日志判断瓶颈)",
+  "url": "https://support.gurobi.com/hc/en-us/articles/39810125521937-Interpreting-Gurobi-Logs",
+  "status": "ok",
+  "chars": 6066
+ },
+ {
+  "id": "gurobi_cuts",
+  "kind": "official",
+  "title": "Gurobi Support: Understanding cutting planes and how to make use of them",
+  "url": "https://support.gurobi.com/hc/en-us/articles/44924553715345-Understanding-cutting-planes-and-how-to-make-use-of-them",
+  "status": "ok",
+  "chars": 9071
+ },
+ {
+  "id": "gurobi_numericguide",
+  "kind": "official",
+  "title": "Gurobi 官方文档: Guidelines for Numerical Issues (NumericFocus/ScaleFlag 等)",
+  "url": "https://docs.gurobi.com/projects/optimizer/en/current/concepts/numericguide.html",
+  "status": "ok",
+  "chars": 17476
  }
 ]
